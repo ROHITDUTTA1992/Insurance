@@ -1,0 +1,68 @@
+
+from flask import Flask, render_template, request, redirect, url_for
+
+app = Flask(__name__)
+
+# Dummy database (in real-world use a proper database like SQLite, PostgreSQL, etc.)
+users = []
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/submit', methods=['POST'])
+def submit():
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        message = request.form['message']
+        
+        # Store in dummy database (replace with database code in real-world application)
+        users.append({'name': name, 'email': email, 'message': message})
+        
+        return redirect(url_for('thank_you'))
+
+@app.route('/thank-you')
+def thank_you():
+    return render_template('thank_you.html')
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insurance Website</title>
+</head>
+<body>
+    <h1>Get an Insurance Quote</h1>
+    <form action="{{ url_for('submit') }}" method="POST">
+        <label for="name">Name:</label><br>
+        <input type="text" id="name" name="name" required><br><br>
+        
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" required><br><br>
+        
+        <label for="message">Message:</label><br>
+        <textarea id="message" name="message" rows="4" required></textarea><br><br>
+        
+        <button type="submit">Submit</button>
+    </form>
+</body>
+
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You!</title>
+</head>
+<body>
+    <h1>Thank You for Your Submission!</h1>
+    <p>We will get back to you shortly.</p>
+</body>
+</html>
